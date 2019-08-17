@@ -47,7 +47,7 @@
       <file>./tests/TestSuites/FunctionalTestSuite.php</file>
     </testsuite>
     <testsuite name="nonfunctional">
-      <file>./tests/TestSuites/UnitTestSuite.php</file>
+      <file>~/.composer/vendor/su-sws/stanford_circleci/src/TestSuites/NonFunctionTestSuite.php</file>
     </testsuite>
   </testsuites>
   <listeners>
