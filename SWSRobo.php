@@ -2,7 +2,7 @@
 
 use Robo\Tasks;
 
-class RoboFile extends Tasks {
+class SWSRobo extends Tasks {
 
   /**
    * @command sws-hello
