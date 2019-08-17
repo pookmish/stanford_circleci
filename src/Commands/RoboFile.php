@@ -32,6 +32,8 @@ class RoboFile extends Tasks {
       ->arg("$html_path/web/{$extension_type}s/custom/$name")
       ->option('config', 'core', '=')
       ->option('filter', '/(Unit|Kernel)/', '=')
+      ->option('coverage-html', "$html_path/artifacts/phpunit/html", '=')
+      ->option('coverage-xml', "$html_path/artifacts/phpunit/xml", '=')
       ->run();
   }
 
