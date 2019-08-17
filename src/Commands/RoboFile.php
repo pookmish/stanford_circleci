@@ -27,9 +27,9 @@ class RoboFile extends Tasks {
 
     $this->taskPhpUnit()
       ->dir("$html_path/web")
-      ->option("$html_path/web/{$extension_type}s/custom/$name")
+      ->arg("$html_path/web/{$extension_type}s/custom/$name")
       ->configFile('core')
-      ->option('filter', '/(Unit|Kernel)/')
+      ->option('filter', '/(Unit|Kernel)/', '=')
       ->run();
   }
 
