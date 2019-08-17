@@ -1,15 +1,15 @@
 #!/usr/bin/env php
 <?php
 
-foreach (array(__DIR__ . '/../../autoload.php', __DIR__ . '/../vendor/autoload.php', __DIR__ . '/vendor/autoload.php') as $circleci_file) {
-    if (file_exists($file)) {
-        define('CIRCLECI_COMPOSER_INSTALL', $file);
-        break;
-    }
+foreach ([__DIR__ . '/../../autoload.php', __DIR__ . '/../vendor/autoload.php', __DIR__ . '/vendor/autoload.php'] as $circleci_file) {
+  if (file_exists($file)) {
+    define('CIRCLECI_COMPOSER_INSTALL', $circleci_file);
+    break;
+  }
 }
 
 unset($circleci_file);
 
 require CIRCLECI_COMPOSER_INSTALL;
 
-\Robo\Tasks\SwsCircleCi::setup();
+\Robo\Tasks\RoboFile::setup();

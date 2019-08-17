@@ -17,8 +17,8 @@
         "sws-circleci"
     ],
     "autoload": {
-        "classmap": [
-            "src/"
+        "files": [
+            "RoboFile.php"
         ]
     }
 }
