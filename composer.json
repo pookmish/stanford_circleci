@@ -1,0 +1,24 @@
+{
+    "name": "su-sws/stanford_circleci",
+    "description": "Tools for circleCi testing CI/CD",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Mike Decker",
+            "email": "pookmish@stanford.edu"
+        }
+    ],
+    "require": {
+        "consolidation/robo": "^1.4",
+        "behat/behat": "^3.5",
+        "phpunit/phpunit": "^8.3"
+    },
+    "bin": [
+        "sws-circleci"
+    ],
+    "autoload": {
+        "classmap": [
+            "src/"
+        ]
+    }
+}
