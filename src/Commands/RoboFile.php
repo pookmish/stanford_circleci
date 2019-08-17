@@ -10,7 +10,7 @@ class RoboFile extends Tasks {
    * @command phpunit
    */
   public function phpunit($root_path) {
-    if (is_dir_empty($root_path)) {
+    if ($this->isDirEmpty($root_path)) {
       $this->taskComposerCreateProject()
         ->arg('drupal-composer/drupal-project:8.x-dev')
         ->option($root_path)
@@ -29,17 +29,25 @@ class RoboFile extends Tasks {
       $this->taskComposerUpdate()->run();
     }
 
-    $this->_symlink("$root_path/docroot", "$root_path/web");
+    $this->_symlink("$root_path/web", "$root_path/docroot");
+    $this->_deleteDir("$root_path/docroot/modules/custom");
     $this->_mkdir("$root_path/docroot/modules/custom");
-    $this->_copy(__DIR__ . '/config/phpunit.xml', "$root_path/docroot/core/phpunit.xml", TRUE);
+    $this->_copy(dirname(dirname(dirname(__FILE__))) . '/config/phpunit.xml', "$root_path/docroot/core/phpunit.xml", TRUE);
 
-    $this->_copy("$root_path/../test", "$root_path/docroot/modules/custom");
+    $this->_symlink("$root_path/../test", "$root_path/docroot/modules/custom");
 
     $this->taskExec('../vendor/bin/phpunit')
       ->dir("$root_path/docroot")
-      ->option('c', 'core')
+      ->option('config', 'core', '=')
       ->arg('modules/custom')
       ->run();
+  }
+
+  protected function isDirEmpty($dir) {
+    if (!is_readable($dir)) {
+      return NULL;
+    }
+    return (count(scandir($dir)) == 2);
   }
 
 }
