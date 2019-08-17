@@ -18,10 +18,12 @@ class RoboFile extends Tasks {
         ->run();
 
       $this->taskComposerRequire()
+        ->dir($root_path)
         ->arg('wikimedia/composer-merge-plugin')
         ->run();
 
       $this->taskComposerConfig()
+        ->dir($root_path)
         ->arg('extra.merge-plugin.require')
         ->arg('../test/composer.json')
         ->run();
