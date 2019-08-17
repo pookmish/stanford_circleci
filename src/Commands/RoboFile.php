@@ -13,16 +13,17 @@ class RoboFile extends Tasks {
     if ($this->isDirEmpty($root_path)) {
       $this->taskComposerCreateProject()
         ->arg('drupal-composer/drupal-project:8.x-dev')
-        ->option($root_path)
+        ->arg($root_path)
         ->option('no-interaction')
         ->run();
 
       $this->taskComposerRequire()
-        ->option('wikimedia/composer-merge-plugin')
+        ->arg('wikimedia/composer-merge-plugin')
         ->run();
 
       $this->taskComposerConfig()
-        ->option('xtra.merge-plugin.require', '../test/composer.json')
+        ->arg('extra.merge-plugin.require')
+        ->arg('../test/composer.json')
         ->run();
     }
     else {
