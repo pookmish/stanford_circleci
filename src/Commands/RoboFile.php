@@ -27,7 +27,9 @@ class RoboFile extends Tasks {
         ->run();
     }
     else {
-      $this->taskComposerUpdate()->run();
+      $this->taskComposerUpdate()
+        ->dir($root_path)
+        ->run();
     }
 
     $extension_type = $this->getExtensionType("$root_path/../test");
