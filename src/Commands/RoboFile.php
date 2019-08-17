@@ -25,14 +25,11 @@ class RoboFile extends Tasks {
 
     $this->_copy(dirname(dirname(dirname(__FILE__))) . '/config/phpunit.xml', "$html_path/web/core/phpunit.xml", TRUE);
 
-    putenv("DRUPAL_ROOT=$html_path/web");
-    putenv("TEST_EXTENSION=$name");
-
-    $this->setPhpUnitTestSuites("$html_path/web/core/phpunit.xml");
     $this->taskPhpUnit()
       ->dir("$html_path/web")
+      ->option("$html_path/web/{$extension_type}s/custom/$name")
       ->configFile('core')
-      ->option('testsuite', 'nonfunctional')
+      ->option('filter', '/(Unit|Kernel)/')
       ->run();
   }
 
