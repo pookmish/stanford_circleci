@@ -25,7 +25,7 @@ class RoboFile extends Tasks {
       $this->taskComposerConfig()
         ->dir($root_path)
         ->arg('extra.merge-plugin.require')
-        ->arg('../test/composer.json')
+        ->arg('../composer.json')
         ->run();
     }
 
