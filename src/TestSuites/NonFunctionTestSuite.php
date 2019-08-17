@@ -25,6 +25,9 @@ class NonFunctionTestSuite extends TestSuite {
     $suite = new static('nonfunctional');
     var_dump($docroot);
     var_dump(__DIR__);
+
+    var_dump(getenv('DRUPAL_ROOT'));
+    var_dump(getenv('TEST_EXTENSION'));
 //    $suite->addTestsBySuiteNamespace($docroot, 'Unit');
 //    $suite->addTestsBySuiteNamespace($docroot, 'Kernel');
     return $suite;
