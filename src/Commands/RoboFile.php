@@ -34,18 +34,17 @@ class RoboFile extends Tasks {
         ->run();
     }
 
-    $extension_type = $this->getExtensionType("$root_path/../test");
-    $name = $this->getExtensionName("$root_path/../test");
+    $extension_type = $this->getExtensionType("$root_path/../");
+    $name = $this->getExtensionName("$root_path/../");
 
-    $this->_symlink("$root_path/web", "$root_path/docroot");
-    $this->_deleteDir("$root_path/docroot/{$extension_type}s/custom");
-    $this->_mkdir("$root_path/docroot/{$extension_type}s/custom");
+    $this->_deleteDir("$root_path/web/{$extension_type}s/custom");
+    $this->_mkdir("$root_path/web/{$extension_type}s/custom");
 
-    $this->_copy(dirname(dirname(dirname(__FILE__))) . '/config/phpunit.xml', "$root_path/docroot/core/phpunit.xml", TRUE);
-    $this->_symlink("$root_path/../test", "$root_path/docroot/{$extension_type}s/custom/$name");
+    $this->_copy(dirname(dirname(dirname(__FILE__))) . '/config/phpunit.xml', "$root_path/web/core/phpunit.xml", TRUE);
+//    $this->_symlink("$root_path/../test", "$root_path/web/{$extension_type}s/custom/$name");
 
     $this->taskExec('../vendor/bin/phpunit')
-      ->dir("$root_path/docroot")
+      ->dir("$root_path/web")
       ->option('config', 'core', '=')
       ->arg("{$extension_type}s/custom/$name")
       ->run();
