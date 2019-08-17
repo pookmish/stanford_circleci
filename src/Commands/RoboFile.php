@@ -25,10 +25,12 @@ class RoboFile extends Tasks {
 
     $this->_copy(dirname(dirname(dirname(__FILE__))) . '/config/phpunit.xml', "$html_path/web/core/phpunit.xml", TRUE);
 
-    $this->taskPhpUnit()
+    // Switch to Robo phpunit when compatible.
+    // @see https://www.drupal.org/project/drupal/issues/2950132
+    $this->taskExec('../vendor/bin/phpunit')
       ->dir("$html_path/web")
       ->arg("$html_path/web/{$extension_type}s/custom/$name")
-      ->configFile('core')
+      ->option('config', 'core', '=')
       ->option('filter', '/(Unit|Kernel)/', '=')
       ->run();
   }
