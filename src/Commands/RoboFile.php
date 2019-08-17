@@ -10,7 +10,7 @@ class RoboFile extends Tasks {
    * @command phpunit
    */
   public function phpunit($root_path) {
-    if ($this->isDirEmpty($root_path)) {
+    if (!is_file($root_path) || $this->isDirEmpty($root_path)) {
       $this->taskComposerCreateProject()
         ->arg('drupal-composer/drupal-project:8.x-dev')
         ->arg($root_path)
