@@ -9,9 +9,7 @@
         }
     ],
     "require": {
-        "consolidation/robo": "^1.4",
-        "behat/behat": "^3.0",
-        "phpunit/phpunit": "^6.0"
+        "consolidation/robo": "^1.4"
     },
     "bin": [
         "sws-circleci"
