@@ -28,11 +28,10 @@ class RoboFile extends Tasks {
         ->arg('../test/composer.json')
         ->run();
     }
-    else {
-      $this->taskComposerUpdate()
-        ->dir($root_path)
-        ->run();
-    }
+
+    $this->taskComposerUpdate()
+      ->dir($root_path)
+      ->run();
 
     $extension_type = $this->getExtensionType("$root_path/../");
     $name = $this->getExtensionName("$root_path/../");
@@ -41,7 +40,13 @@ class RoboFile extends Tasks {
     $this->_mkdir("$root_path/web/{$extension_type}s/custom");
 
     $this->_copy(dirname(dirname(dirname(__FILE__))) . '/config/phpunit.xml', "$root_path/web/core/phpunit.xml", TRUE);
-//    $this->_symlink("$root_path/../test", "$root_path/web/{$extension_type}s/custom/$name");
+    $this->taskRsync()
+      ->fromPath("$root_path/../")
+      ->toPath("$root_path/web/{$extension_type}s/custom/$name")
+      ->recursive()
+      ->option('exclude', 'html')
+      ->dir("$root_path/../")
+      ->run();
 
     $this->taskExec('../vendor/bin/phpunit')
       ->dir("$root_path/web")
