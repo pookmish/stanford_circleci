@@ -1,8 +1,10 @@
 <?php
 
+namespace SWSCircleCi\Commands;
+
 use Robo\Tasks;
 
-class SWSRobo extends Tasks {
+class RoboFile extends Tasks {
 
   /**
    * @command sws-hello

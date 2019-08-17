@@ -17,8 +17,8 @@
         "sws-circleci"
     ],
     "autoload": {
-        "files": [
-            "SWSRobo.php"
-        ]
+        "psr-4":{
+            "SWSCircleCi\\":"src"
+        }
     }
 }
