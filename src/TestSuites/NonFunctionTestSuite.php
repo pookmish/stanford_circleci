@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\Tests\TestSuites;
+namespace SWSCircleCi\TestSuites;
 
 use Drupal\simpletest\TestDiscovery;
 use PHPUnit\Framework\TestSuite;

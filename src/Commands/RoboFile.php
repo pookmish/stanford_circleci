@@ -24,11 +24,20 @@ class RoboFile extends Tasks {
     $name = $this->getExtensionName($extension_dir);
 
     $this->_copy(dirname(dirname(dirname(__FILE__))) . '/config/phpunit.xml', "$html_path/web/core/phpunit.xml", TRUE);
-    $this->taskExec('../vendor/bin/phpunit')
+
+    $this->setPhpUnitTestSuites("$html_path/web/core/phpunit.xml");
+    $this->taskPhpUnit()
       ->dir("$html_path/web")
-      ->option('config', 'core', '=')
+      ->configFile('core')
       ->option('testsuite', 'nonfunctional')
       ->run();
+  }
+
+  protected function setPhpUnitTestSuites($config_path) {
+    $dom = new \DOMDocument();
+    $dom->load($config_path);
+    $dom->getElementsByTagName('file')->item(3)->nodeValue = dirname(dirname(__FILE__)) . '/TestSuites/NonFunctionTestSuite.php';
+    file_put_contents($config_path, $dom->saveXML());
   }
 
   /**

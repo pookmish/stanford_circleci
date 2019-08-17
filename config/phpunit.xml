@@ -38,16 +38,16 @@
   </php>
   <testsuites>
     <testsuite name="unit">
-      <file>./tests/TestSuites/UnitTestSuite.php</file>
+      <file>UnitTestSuite.php</file>
     </testsuite>
     <testsuite name="kernel">
-      <file>./tests/TestSuites/KernelTestSuite.php</file>
+      <file>KernelTestSuite.php</file>
     </testsuite>
     <testsuite name="functional">
-      <file>./tests/TestSuites/FunctionalTestSuite.php</file>
+      <file>FunctionalTestSuite.php</file>
     </testsuite>
     <testsuite name="nonfunctional">
-      <file>~/.composer/vendor/su-sws/stanford_circleci/src/TestSuites/NonFunctionTestSuite.php</file>
+      <file>NonFunctionTestSuite.php</file>
     </testsuite>
   </testsuites>
   <listeners>
