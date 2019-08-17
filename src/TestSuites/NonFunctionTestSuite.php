@@ -23,6 +23,8 @@ class NonFunctionTestSuite extends TestSuite {
     // Figure out the $docroot dynamically.
     $docroot = dirname(dirname(dirname(__DIR__))) . '/docroot';
     $suite = new static('nonfunctional');
+    var_dump($docroot);
+    var_dump(__DIR__);
 //    $suite->addTestsBySuiteNamespace($docroot, 'Unit');
 //    $suite->addTestsBySuiteNamespace($docroot, 'Kernel');
     return $suite;
