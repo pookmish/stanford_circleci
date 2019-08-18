@@ -106,7 +106,7 @@ class RoboFile extends Tasks {
   }
 
   protected function fixupComposer($composer_path) {
-    $composer = json_decode(file_get_contents($composer_path));
+    $composer = json_decode(file_get_contents($composer_path), TRUE);
     $composer['extra']['installer-paths']['web/modules/custom/{$name}'] = ['type:drupal-custom-module'];
     $composer['extra']['installer-paths']['web/themes/custom/{$name}'] = ['type:drupal-custom-theme'];
     $composer['extra']['installer-paths']['web/profiles/custom/{$name}'] = ['type:drupal-custom-profile'];
