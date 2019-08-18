@@ -7,6 +7,17 @@ use Robo\Tasks;
 class RoboFile extends Tasks {
 
   /**
+   * Path to this tool's library root.
+   *
+   * @var string
+   */
+  protected $toolDir;
+
+  public function __construct() {
+    $this->toolDir = dirname(dirname(dirname(__FILE__)));
+  }
+
+  /**
    * Run phpunit tests on the given extension.
    *
    * @param string $html_path
@@ -25,8 +36,7 @@ class RoboFile extends Tasks {
     $extension_type = $this->getExtensionType($extension_dir);
     $name = $this->getExtensionName($extension_dir);
 
-    $this->_copy(dirname(dirname(dirname(__FILE__))) . '/config/phpunit.xml', "$html_path/web/core/phpunit.xml", TRUE);
-    $this->fixupPhpUnit("$html_path/web/core/phpunit.xml", $extension_type, $name);
+    $this->_copy("{$this->toolDir}/config/phpunit.xml", "$html_path/web/core/phpunit.xml");
 
     // Switch to Robo phpunit when compatible.
     // @see https://www.drupal.org/project/drupal/issues/2950132
@@ -43,25 +53,6 @@ class RoboFile extends Tasks {
     }
     $test->option('log-junit', "$html_path/artifacts/phpunit/results.xml")
       ->run();
-  }
-
-  /**
-   * Modify the PHPUnit config to use test suites from our library.
-   *
-   * @param string $config_path
-   *   Path to phpunit.xml.
-   */
-  protected function fixupPhpUnit($config_path, $extension_type, $extension_name) {
-    $extension_path = "$extension_type/custom/$extension_name";
-    $dom = new \DOMDocument();
-    $dom->load($config_path);
-    $directories = $dom->getElementsByTagName('directory');
-    for ($i = 0; $i < $directories->length; $i++) {
-      $directory = $directories->item($i)->nodeValue;
-      $directory = str_replace('modules/custom', $extension_path, $directory);
-      $directories->item($i)->nodeValue = $directory;
-    }
-    file_put_contents($config_path, $dom->saveXML());
   }
 
   /**
@@ -83,18 +74,35 @@ class RoboFile extends Tasks {
         ->option('no-install')
         ->run();
 
-      $this->fixupComposer("$html_path/composer.json");
+      $this->taskComposerRequire()
+        ->dir($html_path)
+        ->arg('wikimedia/composer-merge-plugin')
+        ->option('no-update')
+        ->run();
 
       $this->taskComposerConfig()
         ->dir($html_path)
         ->arg('extra.merge-plugin.require')
+        ->arg("{$this->toolDir}/composer.json")
+        ->run();
+
+      $this->taskComposerConfig()
+        ->dir($this->toolDir)
+        ->arg('extra.merge-plugin.require')
         ->arg("$extension_dir/composer.json")
+        ->run();
+
+      $this->taskComposerUpdate()
+        ->dir($html_path)
         ->run();
     }
 
     $this->taskComposerUpdate()
       ->dir($html_path)
       ->run();
+
+    var_dump(scandir("$html_path/web/modules/custom"));
+    var_dump(scandir("$html_path/web/libraries"));
 
     $extension_type = $this->getExtensionType($extension_dir);
     $name = $this->getExtensionName($extension_dir);
@@ -112,19 +120,6 @@ class RoboFile extends Tasks {
       ->toPath("$html_path/web/{$extension_type}s/custom/$name")
       ->recursive()
       ->option('exclude', 'html')
-      ->run();
-  }
-
-  protected function fixupComposer($composer_path) {
-    $composer = json_decode(file_get_contents($composer_path), TRUE);
-    $composer['extra']['installer-paths']['web/modules/custom/{$name}'] = ['type:drupal-custom-module'];
-    $composer['extra']['installer-paths']['web/themes/custom/{$name}'] = ['type:drupal-custom-theme'];
-    $composer['extra']['installer-paths']['web/profiles/custom/{$name}'] = ['type:drupal-custom-profile'];
-    file_put_contents($composer_path, json_encode($composer));
-
-    $this->taskComposerRequire()
-      ->dir(dirname($composer_path))
-      ->arg('wikimedia/composer-merge-plugin')
       ->run();
   }
 
