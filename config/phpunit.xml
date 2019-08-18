@@ -56,6 +56,8 @@
     <!-- The Symfony deprecation listener has to come after the Drupal listener -->
     <!--<listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener">-->
     <!--</listener>-->
+  </listeners>
+  <filter>
     <whitelist addUncoveredFilesFromWhitelist="true">
       <directory>../modules/custom</directory>
       <exclude>
@@ -63,5 +65,5 @@
         <directory>../modules/custom/*/modules/*/tests</directory>
       </exclude>
     </whitelist>
-  </listeners>
+  </filter>
 </phpunit>
