@@ -67,18 +67,10 @@ class RoboFile extends Tasks {
         ->arg('drupal-composer/drupal-project:8.x-dev')
         ->arg($html_path)
         ->option('no-interaction')
+        ->option('no-install')
         ->run();
 
-      $this->taskComposerRequire()
-        ->dir($html_path)
-        ->arg('wikimedia/composer-merge-plugin')
-        ->run();
-
-      $this->taskComposerConfig()
-        ->dir($html_path)
-        ->arg('extra.merge-plugin.require')
-        ->arg('../composer.json')
-        ->run();
+      $this->fixupComposer("$html_path/composer.json");
     }
 
     $this->taskComposerUpdate()
@@ -102,6 +94,25 @@ class RoboFile extends Tasks {
       ->recursive()
       ->option('exclude', 'html')
       ->run();
+  }
+
+  protected function fixupComposer($composer_path) {
+    $composer = json_decode(file_get_contents($composer_path));
+    $composer['extra']['installer-paths']['web/modules/custom/{$name}'] = ['type:drupal-custom-module'];
+    $composer['extra']['installer-paths']['web/themes/custom/{$name}'] = ['type:drupal-custom-theme'];
+    $composer['extra']['installer-paths']['web/profiles/custom/{$name}'] = ['type:drupal-custom-profile'];
+    file_put_contents($composer_path, json_encode($composer));
+
+    $this->taskComposerRequire()
+      ->dir(dirname($composer_path))
+      ->arg('wikimedia/composer-merge-plugin')
+      ->run();
+    $this->taskComposerConfig()
+      ->dir(dirname($composer_path))
+      ->arg('extra.merge-plugin.require')
+      ->arg('../composer.json')
+      ->run();
+
   }
 
   /**
