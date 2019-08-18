@@ -24,6 +24,7 @@ class RoboFile extends Tasks {
     $name = $this->getExtensionName($extension_dir);
 
     $this->_copy(dirname(dirname(dirname(__FILE__))) . '/config/phpunit.xml', "$html_path/web/core/phpunit.xml", TRUE);
+    $this->fixupPhpUnit("$html_path/web/core/phpunit.xml", $extension_type, $name);
 
     // Switch to Robo phpunit when compatible.
     // @see https://www.drupal.org/project/drupal/issues/2950132
@@ -45,10 +46,16 @@ class RoboFile extends Tasks {
    * @param string $config_path
    *   Path to phpunit.xml.
    */
-  protected function fixupPhpUnit($config_path) {
+  protected function fixupPhpUnit($config_path, $extension_type, $extension_name) {
+    $extension_path = "$extension_type/custom/$extension_name";
     $dom = new \DOMDocument();
     $dom->load($config_path);
-    $dom->getElementsByTagName('file')->item(3)->nodeValue;
+    $directories = $dom->getElementsByTagName('directory');
+    for ($i = 0; $i < $directories->length; $i++) {
+      $directory = $directories->item($i)->nodeValue;
+      $directory = str_replace('modules/custom', $extension_path, $directory);
+      $directories->item($i)->nodeValue = $directory;
+    }
     file_put_contents($config_path, $dom->saveXML());
   }
 
@@ -61,6 +68,16 @@ class RoboFile extends Tasks {
    *   Path to the extension being tested.
    */
   protected function setupDrupal($html_path, $extension_dir) {
+    $url = 'http://localhost';
+    $ch = curl_init();
+    $timeout = 5;
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+    $data = curl_exec($ch);
+    curl_close($ch);
+    $this->say($data);
+    return;
     // The directory is completely empty, built all the dependencies.
     if (!is_file($html_path) || $this->isDirEmpty($html_path)) {
       $this->taskComposerCreateProject()
