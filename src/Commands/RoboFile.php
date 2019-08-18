@@ -72,11 +72,11 @@ class RoboFile extends Tasks {
 
       $this->fixupComposer("$html_path/composer.json");
 
-          $this->taskComposerConfig()
-      ->dir($html_path)
-      ->arg('extra.merge-plugin.require')
-      ->arg("$extension_dir/composer.json")
-      ->run();
+      $this->taskComposerConfig()
+        ->dir($html_path)
+        ->arg('extra.merge-plugin.require')
+        ->arg("$extension_dir/composer.json")
+        ->run();
     }
 
     $this->taskComposerUpdate()
@@ -100,6 +100,9 @@ class RoboFile extends Tasks {
       ->recursive()
       ->option('exclude', 'html')
       ->run();
+
+    var_dump(scandir("$html_path/web/modules/custom"));
+    var_dump(scandir("$html_path/web/modules/custom/$name"));
   }
 
   protected function fixupComposer($composer_path) {
