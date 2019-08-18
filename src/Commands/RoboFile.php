@@ -14,21 +14,11 @@ class RoboFile extends Tasks {
    * @param string $extension_dir
    *   Path to the drupal extension.
    *
+   * @option bool with-coverage
+   *
    * @command phpunit
    */
-  public function phpunit($html_path, $extension_dir = NULL) {
-
-    $url = 'http://127.0.0.1';
-    $ch = curl_init();
-    $timeout = 5;
-    curl_setopt($ch, CURLOPT_URL, $url);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
-    $data = curl_exec($ch);
-    curl_close($ch);
-    $this->say($data);
-    return;
-
+  public function phpunitCoverage($html_path, $extension_dir = NULL, $options = ['with-coverage' => FALSE]) {
     $extension_dir = is_null($extension_dir) ? "$html_path/../" : $extension_dir;
     $this->setupDrupal($html_path, $extension_dir);
 
@@ -40,15 +30,18 @@ class RoboFile extends Tasks {
 
     // Switch to Robo phpunit when compatible.
     // @see https://www.drupal.org/project/drupal/issues/2950132
-    $this->taskExec('../vendor/bin/phpunit')
+    $test = $this->taskExec('../vendor/bin/phpunit')
       ->dir("$html_path/web")
       ->arg("$html_path/web/{$extension_type}s/custom/$name")
-      ->option('config', 'core', '=')
-      ->option('filter', '/(Unit|Kernel)/', '=')
-      ->option('coverage-html', "$html_path/artifacts/phpunit/html", '=')
-      ->option('coverage-xml', "$html_path/artifacts/phpunit/xml", '=')
-      ->option('coverage-clover', "$html_path/artifacts/phpunit/clover.xml", '=')
-      ->option('log-junit', "$html_path/artifacts/phpunit/results.xml")
+      ->option('config', 'core', '=');
+
+    if ($options['with-coverage']) {
+      $test->option('filter', '/(Unit|Kernel)/', '=')
+        ->option('coverage-html', "$html_path/artifacts/phpunit/html", '=')
+        ->option('coverage-xml', "$html_path/artifacts/phpunit/xml", '=')
+        ->option('whitelist', "$html_path/web/{$extension_type}s/custom/$name");
+    }
+    $test->option('log-junit', "$html_path/artifacts/phpunit/results.xml")
       ->run();
   }
 
