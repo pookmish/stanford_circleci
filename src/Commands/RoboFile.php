@@ -35,7 +35,6 @@ class RoboFile extends Tasks {
       ->option('filter', '/(Unit|Kernel)/', '=')
       ->option('coverage-html', "$html_path/artifacts/phpunit/html", '=')
       ->option('coverage-xml', "$html_path/artifacts/phpunit/xml", '=')
-      ->option('log-junit', "$html_path/artifacts/phpunit/results.xml")
       ->run();
   }
 
@@ -100,9 +99,6 @@ class RoboFile extends Tasks {
       ->recursive()
       ->option('exclude', 'html')
       ->run();
-
-    var_dump(scandir("$html_path/web/modules/custom"));
-    var_dump(scandir("$html_path/web/modules/custom/$name"));
   }
 
   protected function fixupComposer($composer_path) {
