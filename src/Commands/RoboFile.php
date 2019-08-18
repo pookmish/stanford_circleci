@@ -80,17 +80,8 @@ class RoboFile extends Tasks {
         ->option('no-update')
         ->run();
 
-      $this->taskComposerConfig()
-        ->dir("{$this->toolDir}/config")
-        ->arg('extra.merge-plugin.require')
-        ->arg("$extension_dir/composer.json")
-        ->run();
-
-      $this->taskComposerConfig()
-        ->dir($html_path)
-        ->arg('extra.merge-plugin.require')
-        ->arg("{$this->toolDir}/config/composer.json")
-        ->run();
+      $this->addComposerMergeFile("{$this->toolDir}/config/composer.json", "$extension_dir/composer.json");
+      $this->addComposerMergeFile("$html_path/composer.json", "{$this->toolDir}/config/composer.json");
 
       $this->taskComposerUpdate()
         ->dir($html_path)
@@ -121,6 +112,16 @@ class RoboFile extends Tasks {
       ->recursive()
       ->option('exclude', 'html')
       ->run();
+  }
+
+  /**
+   * @param $composer_path
+   * @param $file_to_merge
+   */
+  protected function addComposerMergeFile($composer_path, $file_to_merge) {
+    $composer = json_decode(file_get_contents($composer_path), TRUE);
+    $composer['extra']['merge-plugin']['require'][] = $file_to_merge;
+    file_put_contents($composer_path, json_encode($composer));
   }
 
   /**
