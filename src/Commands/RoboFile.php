@@ -30,6 +30,8 @@ class RoboFile extends Tasks {
    * @command phpunit
    */
   public function phpunitCoverage($html_path, $extension_dir = NULL, $options = ['with-coverage' => FALSE]) {
+
+    return;
     $extension_dir = is_null($extension_dir) ? "$html_path/.." : $extension_dir;
     $this->setupDrupal($html_path, $extension_dir);
 
