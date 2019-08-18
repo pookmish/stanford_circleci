@@ -71,6 +71,12 @@ class RoboFile extends Tasks {
         ->run();
 
       $this->fixupComposer("$html_path/composer.json");
+
+          $this->taskComposerConfig()
+      ->dir($html_path)
+      ->arg('extra.merge-plugin.require')
+      ->arg("$extension_dir/composer.json")
+      ->run();
     }
 
     $this->taskComposerUpdate()
@@ -107,12 +113,6 @@ class RoboFile extends Tasks {
       ->dir(dirname($composer_path))
       ->arg('wikimedia/composer-merge-plugin')
       ->run();
-    $this->taskComposerConfig()
-      ->dir(dirname($composer_path))
-      ->arg('extra.merge-plugin.require')
-      ->arg('../composer.json')
-      ->run();
-
   }
 
   /**
