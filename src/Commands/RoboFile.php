@@ -34,6 +34,7 @@ class RoboFile extends Tasks {
       ->option('filter', '/(Unit|Kernel)/', '=')
       ->option('coverage-html', "$html_path/artifacts/phpunit/html", '=')
       ->option('coverage-xml', "$html_path/artifacts/phpunit/xml", '=')
+      ->option('coverage-clover', "$html_path/artifacts/phpunit/clover.xml", '=')
       ->option('log-junit', "$html_path/artifacts/phpunit/results.xml")
       ->run();
   }
