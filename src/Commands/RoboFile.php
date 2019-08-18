@@ -24,7 +24,6 @@ class RoboFile extends Tasks {
     $name = $this->getExtensionName($extension_dir);
 
     $this->_copy(dirname(dirname(dirname(__FILE__))) . '/config/phpunit.xml', "$html_path/web/core/phpunit.xml", TRUE);
-    $this->say(file_get_contents("$html_path/web/core/phpunit.xml"));
 
     // Switch to Robo phpunit when compatible.
     // @see https://www.drupal.org/project/drupal/issues/2950132
