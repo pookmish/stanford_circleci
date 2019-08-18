@@ -118,10 +118,21 @@ class RoboFile extends Tasks {
    * @param $composer_path
    * @param $file_to_merge
    */
-  protected function addComposerMergeFile($composer_path, $file_to_merge) {
+  protected function addComposerMergeFile($composer_path, $file_to_merge, $update = FALSE) {
     $composer = json_decode(file_get_contents($composer_path), TRUE);
     $composer['extra']['merge-plugin']['require'][] = $file_to_merge;
+    $composer['extra']['merge-extra'] = TRUE;
+    $composer['extra']['merge-extra-deep'] = TRUE;
+    $composer['extra']['merge-scripts'] = TRUE;
+    $composer['extra']['replace'] = FALSE;
+    $composer['extra']['ignore-duplicates'] = TRUE;
     file_put_contents($composer_path, json_encode($composer));
+
+    if ($update) {
+      $this->taskComposerUpdate()
+        ->dir(dirname($composer_path))
+        ->run();
+    }
   }
 
   /**
