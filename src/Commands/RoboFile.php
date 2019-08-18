@@ -35,6 +35,7 @@ class RoboFile extends Tasks {
       ->option('filter', '/(Unit|Kernel)/', '=')
       ->option('coverage-html', "$html_path/artifacts/phpunit/html", '=')
       ->option('coverage-xml', "$html_path/artifacts/phpunit/xml", '=')
+      ->option('log-junit', "$html_path/artifacts/phpunit/results.xml")
       ->run();
   }
 
@@ -44,10 +45,10 @@ class RoboFile extends Tasks {
    * @param string $config_path
    *   Path to phpunit.xml.
    */
-  protected function setPhpUnitTestSuites($config_path) {
+  protected function fixupPhpUnit($config_path) {
     $dom = new \DOMDocument();
     $dom->load($config_path);
-    $dom->getElementsByTagName('file')->item(3)->nodeValue = dirname(dirname(__FILE__)) . '/TestSuites/NonFunctionTestSuite.php';
+    $dom->getElementsByTagName('file')->item(3)->nodeValue;
     file_put_contents($config_path, $dom->saveXML());
   }
 
