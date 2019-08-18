@@ -29,9 +29,7 @@ class RoboFile extends Tasks {
    *
    * @command phpunit
    */
-  public function phpunitCoverage($html_path, $extension_dir = NULL, $options = ['with-coverage' => FALSE]) {
-
-    return;
+  public function phpunit($html_path, $extension_dir = NULL, $options = ['with-coverage' => FALSE]) {
     $extension_dir = is_null($extension_dir) ? "$html_path/.." : $extension_dir;
     $this->setupDrupal($html_path, $extension_dir);
 
@@ -83,7 +81,7 @@ class RoboFile extends Tasks {
         ->run();
 
       $this->taskComposerConfig()
-        ->dir($this->toolDir)
+        ->dir("{$this->toolDir}/config")
         ->arg('extra.merge-plugin.require')
         ->arg("$extension_dir/composer.json")
         ->run();
