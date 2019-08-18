@@ -17,6 +17,18 @@ class RoboFile extends Tasks {
    * @command phpunit
    */
   public function phpunit($html_path, $extension_dir = NULL) {
+
+    $url = 'http://127.0.0.1';
+    $ch = curl_init();
+    $timeout = 5;
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+    $data = curl_exec($ch);
+    curl_close($ch);
+    $this->say($data);
+    return;
+
     $extension_dir = is_null($extension_dir) ? "$html_path/../" : $extension_dir;
     $this->setupDrupal($html_path, $extension_dir);
 
@@ -68,16 +80,7 @@ class RoboFile extends Tasks {
    *   Path to the extension being tested.
    */
   protected function setupDrupal($html_path, $extension_dir) {
-    $url = 'http://localhost';
-    $ch = curl_init();
-    $timeout = 5;
-    curl_setopt($ch, CURLOPT_URL, $url);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
-    $data = curl_exec($ch);
-    curl_close($ch);
-    $this->say($data);
-    return;
+
     // The directory is completely empty, built all the dependencies.
     if (!is_file($html_path) || $this->isDirEmpty($html_path)) {
       $this->taskComposerCreateProject()
