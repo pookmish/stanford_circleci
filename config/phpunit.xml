@@ -62,7 +62,6 @@
       <directory>../modules/custom</directory>
       <exclude>
         <directory>../modules/custom/*/tests</directory>
-        <directory>../modules/custom/*/modules/*/tests</directory>
       </exclude>
     </whitelist>
   </filter>
