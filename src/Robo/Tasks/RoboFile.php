@@ -37,7 +37,8 @@ class RoboFile extends Tasks {
    * @command phpunit
    */
   public function phpunit($html_path, $options = ['extension-dir' => NULL, 'with-coverage' => FALSE]) {
-    $extension_dir = is_null($options['extension_dir']) ? "$html_path/.." : $options['extension_dir'];
+
+    $extension_dir = is_null($options['extension-dir']) ? "$html_path/.." : $options['extension-dir'];
     $this->setupDrupal($html_path, $extension_dir);
 
     $extension_type = $this->getExtensionType($extension_dir);
