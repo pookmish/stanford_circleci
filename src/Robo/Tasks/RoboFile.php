@@ -75,7 +75,6 @@ class RoboFile extends Tasks {
       $directories->item($i)->nodeValue = $directory;
     }
     file_put_contents($config_path, $dom->saveXML());
-    $this->say(file_get_contents($config_path));
   }
 
   /**
