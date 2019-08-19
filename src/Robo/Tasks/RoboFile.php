@@ -58,9 +58,24 @@ class RoboFile extends Tasks {
         ->option('coverage-html', "$html_path/artifacts/phpunit/html", '=')
         ->option('coverage-xml', "$html_path/artifacts/phpunit/xml", '=')
         ->option('whitelist', "$html_path/web/{$extension_type}s/custom/$name");
+
+      $this->fixupPhpunitConfig("$html_path/web/core/phpunit.xml", $extension_type, $name);
     }
     $test->option('log-junit', "$html_path/artifacts/phpunit/results.xml")
       ->run();
+  }
+
+  protected function fixupPhpunitConfig($config_path, $extension_type, $extension_name) {
+    $dom = new \DOMDocument();
+    $dom->loadXML(file_get_contents($config_path));
+    $directories = $dom->getElementsByTagName('directory');
+    for ($i = 0; $i < $directories->length; $i++) {
+      $directory = $directories->item($i)->nodeValue;
+      $directory = str_replace('modules/custom', "{$extension_type}s/custom/$extension_name", $directory);
+      $directories->item($i)->nodeValue = $directory;
+    }
+    file_put_contents($config_path, $dom->saveXML());
+    $this->say(file_get_contents($config_path));
   }
 
   /**
@@ -141,7 +156,7 @@ class RoboFile extends Tasks {
 
     // Copy the extension into its appropriate path.
     $this->taskRsync()
-      ->fromPath($extension_dir)
+      ->fromPath("$extension_dir/")
       ->toPath("$html_path/web/{$extension_type}s/custom/$name")
       ->recursive()
       ->option('exclude', 'html')
