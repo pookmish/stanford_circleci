@@ -107,10 +107,6 @@ class RoboFile extends Tasks {
         ->option('no-install')
         ->run();
 
-      $this->taskFilesystemStack()
-        ->symlink("$html_path/docroot", "$html_path/web")
-        ->run();
-
       $this->taskComposerRequire()
         ->dir($html_path)
         ->arg('wikimedia/composer-merge-plugin')
@@ -122,6 +118,10 @@ class RoboFile extends Tasks {
 
       $this->taskComposerUpdate()
         ->dir($html_path)
+        ->run();
+
+      $this->taskFilesystemStack()
+        ->symlink("$html_path/docroot", "$html_path/web")
         ->run();
     }
 
