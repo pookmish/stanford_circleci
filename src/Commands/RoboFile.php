@@ -13,6 +13,9 @@ class RoboFile extends Tasks {
    */
   protected $toolDir;
 
+  /**
+   * RoboFile constructor.
+   */
   public function __construct() {
     $this->toolDir = dirname(dirname(dirname(__FILE__)));
   }
@@ -56,6 +59,27 @@ class RoboFile extends Tasks {
   }
 
   /**
+   * Run behat commands defined in the module.
+   *
+   * @command behat
+   */
+  public function behat($html_path, $extension_dir = NULL) {
+    $extension_dir = is_null($extension_dir) ? "$html_path/.." : $extension_dir;
+    $this->setupDrupal($html_path, $extension_dir);
+
+    $extension_type = $this->getExtensionType($extension_dir);
+    $name = $this->getExtensionName($extension_dir);
+
+    $this->taskBehat()
+      ->dir($html_path)
+      ->config("{$this->toolDir}/config/behat.yml")
+      ->arg("$html_path/web/{$extension_type}s/custom/$name")
+      ->option('suite', 'local')
+      ->noInteraction()
+      ->run();
+  }
+
+  /**
    * Set up the directory with bare bones Drupal and get all dependencies.
    *
    * @param string $html_path
@@ -72,6 +96,10 @@ class RoboFile extends Tasks {
         ->arg($html_path)
         ->option('no-interaction')
         ->option('no-install')
+        ->run();
+
+      $this->taskFilesystemStack()
+        ->symlink("$html_path/docroot", "$html_path/web")
         ->run();
 
       $this->taskComposerRequire()
@@ -91,9 +119,6 @@ class RoboFile extends Tasks {
     $this->taskComposerUpdate()
       ->dir($html_path)
       ->run();
-
-    var_dump(scandir("$html_path/web/modules/custom"));
-    var_dump(scandir("$html_path/web/libraries"));
 
     $extension_type = $this->getExtensionType($extension_dir);
     $name = $this->getExtensionName($extension_dir);
