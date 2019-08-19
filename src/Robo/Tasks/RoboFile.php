@@ -20,7 +20,7 @@ class RoboFile extends Tasks {
    * RoboFile constructor.
    */
   public function __construct() {
-    $this->toolDir = dirname(dirname(dirname(__FILE__)));
+    $this->toolDir = dirname(__FILE__, 4);
   }
 
   /**
@@ -28,15 +28,16 @@ class RoboFile extends Tasks {
    *
    * @param string $html_path
    *   Path to the drupal project.
-   * @param string $extension_dir
-   *   Path to the drupal extension.
+   * @param array $options
+   *   Command options
    *
-   * @option bool with-coverage
+   * @option extension-dir Path to the Drupal extension.
+   * @option with-coverage Flag to run PHPUnit with code coverage.
    *
    * @command phpunit
    */
-  public function phpunit($html_path, $extension_dir = NULL, $options = ['with-coverage' => FALSE]) {
-    $extension_dir = is_null($extension_dir) ? "$html_path/.." : $extension_dir;
+  public function phpunit($html_path, $options = ['extension-dir' => NULL, 'with-coverage' => FALSE]) {
+    $extension_dir = is_null($options['extension_dir']) ? "$html_path/.." : $options['extension_dir'];
     $this->setupDrupal($html_path, $extension_dir);
 
     $extension_type = $this->getExtensionType($extension_dir);
@@ -97,7 +98,7 @@ class RoboFile extends Tasks {
   protected function setupDrupal($html_path, $extension_dir) {
 
     // The directory is completely empty, built all the dependencies.
-    if (!is_file($html_path) || $this->isDirEmpty($html_path)) {
+    if (!is_dir($html_path) || $this->isDirEmpty($html_path)) {
       $this->taskComposerCreateProject()
         ->arg('drupal-composer/drupal-project:8.x-dev')
         ->arg($html_path)
