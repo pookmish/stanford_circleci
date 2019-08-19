@@ -12,7 +12,8 @@
         }
     ],
     "require": {
-        "php": ">=7.1"
+        "php": ">=7.1",
+        "davidbarratt/custom-installer": "^1.0@alpha"
     },
     "extra": {
         "installer-paths": {
