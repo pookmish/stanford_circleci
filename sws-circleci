@@ -20,7 +20,7 @@ $classLoader = require $autoloaderPath;
 $appName = "SWSCircleCi";
 //$appVersion = trim(file_get_contents(__DIR__ . '/VERSION'));
 $appVersion = 1.0;
-$commandClasses = [ \SWSCircleCi\Commands\RoboFile::class ];
+$commandClasses = [ \SWSCircleCi\Robo\Tasks\RoboFile::class ];
 $selfUpdateRepository = 'su-sws/stanford_circleci';
 $configurationFilename = 'circleci.config.yml';
 

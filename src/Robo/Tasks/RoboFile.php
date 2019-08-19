@@ -1,10 +1,13 @@
 <?php
 
-namespace SWSCircleCi\Commands;
+namespace SWSCircleCi\Robo\Tasks;
 
 use Robo\Tasks;
+use Boedah\Robo\Task\Drush\loadTasks as drushTasks;
 
 class RoboFile extends Tasks {
+
+  use drushTasks;
 
   /**
    * Path to this tool's library root.
@@ -66,6 +69,10 @@ class RoboFile extends Tasks {
   public function behat($html_path, $extension_dir = NULL) {
     $extension_dir = is_null($extension_dir) ? "$html_path/.." : $extension_dir;
     $this->setupDrupal($html_path, $extension_dir);
+
+    $this->taskDrushStack()
+      ->siteInstall('minimal')
+      ->run();
 
     $extension_type = $this->getExtensionType($extension_dir);
     $name = $this->getExtensionName($extension_dir);

@@ -9,7 +9,8 @@
         }
     ],
     "require": {
-        "consolidation/robo": "^1.4"
+        "consolidation/robo": "^1.4",
+        "boedah/robo-drush": "^4.2"
     },
     "bin": [
         "sws-circleci"
