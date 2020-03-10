@@ -10,6 +10,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Create package.json
+        run: | 
+          touch package.json
       - name: Conventional Changelog Action
         uses: TriPSs/conventional-changelog-action@v1.2.0
         with:
