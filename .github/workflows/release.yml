@@ -12,7 +12,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Create package.json
         run: | 
-          touch package.json
+          echo "{}" >  package.json
       - name: Conventional Changelog Action
         uses: TriPSs/conventional-changelog-action@v1.2.0
         with:
