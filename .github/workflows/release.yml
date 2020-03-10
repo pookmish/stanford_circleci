@@ -10,22 +10,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Create package.json
-        run: | 
-          echo "{}" >  package.json
-      - name: Conventional Changelog Action
-        uses: TriPSs/conventional-changelog-action@v1.2.0
+      - name: Generate changelog
+        uses: charmixer/auto-changelog-action@v1
         with:
-          github-token: ${{ secrets.github_token }}
-          git-message: 'chore(release): {version}'
-          preset: 'angular'
-          tag-prefix: ''
-          output-file: 'CHANGELOG.md'
-          changelog-release-count: 5
-
-#      - name: Tag
-#        uses: K-Phoen/semver-release-action@master
-#        with:
-#          release_branch: master
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN or GITHUB_TOKEN }}
+      - name: Tag
+        uses: K-Phoen/semver-release-action@master
+        with:
+          release_branch: master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
