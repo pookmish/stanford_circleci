@@ -1,7 +1,7 @@
   
 {
   "rules": {
-    "patch": ["*.info.yml"],
+    "patch": ["*"],
     "frontend": ["*.js", "*.scss", "*.css", "*.twig", ".theme"],
     "backend": ["*.php", "*.module"],
     "ci": [".circleci", ".github"]
